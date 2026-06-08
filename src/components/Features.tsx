@@ -6,12 +6,12 @@ export function Features() {
   return (
     <section id="about-us" className="py-28 bg-white relative overflow-hidden">
       {/* Decorative element */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1280px] h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="text-center max-w-[768px] mx-auto mb-20">
           <span className="px-4 py-1.5 bg-blue-50 border border-blue-200 text-blue-600 text-xs font-bold uppercase tracking-widest rounded-full inline-block mb-4 shadow-sm">
             Our Premium Services
           </span>

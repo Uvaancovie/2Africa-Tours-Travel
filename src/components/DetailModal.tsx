@@ -43,7 +43,7 @@ export function DetailModal({ item, onClose, onBook }: DetailModalProps) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-blue-950/60 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm"
       />
 
       {/* Modal Card */}
@@ -52,12 +52,12 @@ export function DetailModal({ item, onClose, onBook }: DetailModalProps) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ type: 'spring', damping: 25, stiffness: 250 }}
-        className="bg-white w-full max-w-4xl rounded-[40px] overflow-hidden border border-blue-100 shadow-2xl relative z-10 flex flex-col md:flex-row max-h-[90vh] md:max-h-[85vh]"
+        className="bg-surface w-full max-w-[896px] rounded-[40px] overflow-hidden border border-border shadow-2xl relative z-10 flex flex-col md:flex-row max-h-[90vh] md:max-h-[85vh]"
       >
         {/* Close Button */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm border border-blue-100 hover:border-red-200 text-blue-900 hover:text-red-600 p-2 rounded-full z-20 hover:scale-105 active:scale-95 transition-all shadow-md"
+          className="absolute top-4 right-4 bg-surface/90 backdrop-blur-sm border border-border hover:border-accent/20 text-on-surface hover:text-accent p-2 rounded-full z-20 hover:scale-105 active:scale-95 transition-all shadow-md"
         >
           <X className="w-5 h-5" />
         </button>
@@ -68,26 +68,26 @@ export function DetailModal({ item, onClose, onBook }: DetailModalProps) {
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${item.imageUrl})` }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-blue-950/80 via-blue-900/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
           
           {/* Badge overlays */}
-          <div className="absolute bottom-6 left-6 text-white z-10">
+          <div className="absolute bottom-6 left-6 text-on-primary z-10">
             {isDeal ? (
               <div className="flex flex-col gap-2">
-                <span className="bg-red-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full w-fit shadow-md">
+                <span className="bg-accent text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full w-fit shadow-md text-on-accent">
                   Exclusive Offer
                 </span>
-                <span className="text-sm font-light text-blue-100 uppercase tracking-widest block">
+                <span className="text-sm font-light text-on-primary/80 uppercase tracking-widest block">
                   {(item as Deal).destination}
                 </span>
               </div>
             ) : (
               <div className="flex flex-col gap-2">
-                <span className="bg-blue-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full w-fit shadow-md">
+                <span className="bg-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full w-fit shadow-md text-on-primary">
                   {(item as Tour).type}
                 </span>
                 {item.location && (
-                  <span className="text-sm font-light text-blue-100 uppercase tracking-widest block">
+                  <span className="text-sm font-light text-on-primary/80 uppercase tracking-widest block">
                     {(item as Tour).location}
                   </span>
                 )}
@@ -100,44 +100,44 @@ export function DetailModal({ item, onClose, onBook }: DetailModalProps) {
         <div className="w-full md:w-1/2 p-6 sm:p-10 flex flex-col justify-between overflow-y-auto">
           <div>
             {/* Title */}
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-blue-955 mb-4 leading-tight">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-on-surface mb-4 leading-tight">
               {item.title}
             </h3>
 
             {/* Meta tags */}
-            <div className="flex flex-wrap gap-4 text-xs font-bold text-blue-800/60 uppercase tracking-widest mb-6">
+            <div className="flex flex-wrap gap-4 text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-6">
               {!isDeal && (item as Tour).duration && (
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-blue-600" />
+                  <Clock className="w-4 h-4 text-primary" />
                   <span>{(item as Tour).duration}</span>
                 </div>
               )}
               {isDeal && (item as Deal).deadline && (
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-red-600" />
+                  <Clock className="w-4 h-4 text-accent" />
                   <span>{(item as Deal).deadline}</span>
                 </div>
               )}
               <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-blue-600" />
+                <ShieldCheck className="w-4 h-4 text-primary" />
                 <span>Quality Assured</span>
               </div>
             </div>
 
             {/* Description */}
-            <p className="text-blue-900/80 text-sm leading-relaxed mb-6 font-light">
+            <p className="text-on-surface-variant text-sm leading-relaxed mb-6 font-light">
               {item.description}
             </p>
 
             {/* What's Included */}
             <div className="mb-8">
-              <h4 className="text-[11px] font-bold text-blue-800 uppercase tracking-widest mb-4">
+              <h4 className="text-[11px] font-bold text-on-surface uppercase tracking-widest mb-4">
                 What's Included
               </h4>
               <ul className="space-y-2.5">
                 {inclusions.map((inclusion, idx) => (
-                  <li key={idx} className="flex gap-2.5 text-xs text-blue-900 font-light items-start">
-                    <Check className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                  <li key={idx} className="flex gap-2.5 text-xs text-on-surface-variant font-light items-start">
+                    <Check className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                     <span>{inclusion}</span>
                   </li>
                 ))}
@@ -146,21 +146,21 @@ export function DetailModal({ item, onClose, onBook }: DetailModalProps) {
           </div>
 
           {/* Pricing & Call to Action */}
-          <div className="border-t border-blue-100 pt-6 mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <div className="border-t border-border pt-6 mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div className="flex flex-col">
               {originalPrice && (
-                <span className="text-xs text-blue-400 line-through font-bold">
+                <span className="text-xs text-on-surface-variant line-through font-bold">
                   R {originalPrice.toLocaleString()}
                 </span>
               )}
-              <span className="text-3xl font-extrabold text-blue-950 tracking-tight">
-                R {price?.toLocaleString()} <span className="text-xs text-blue-500 font-light">/pp</span>
+              <span className="text-3xl font-extrabold text-on-surface tracking-tight">
+                R {price?.toLocaleString()} <span className="text-xs text-on-surface-variant font-light">/pp</span>
               </span>
             </div>
 
             <button 
               onClick={() => onBook(item)}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-6 py-3.5 rounded-2xl flex items-center justify-center gap-2 group hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-blue-600/15"
+              className="bg-primary hover:bg-primary/90 text-on-primary font-bold text-sm px-6 py-3.5 rounded-2xl flex items-center justify-center gap-2 group hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary/15"
             >
               Inquire & Book Now
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
