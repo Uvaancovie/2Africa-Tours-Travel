@@ -1,14 +1,19 @@
-import { useState, useEffect } from 'react';
-import { Menu, X, Compass } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import logo from '../assets/logo.png';
 
-export function Navbar() {
+interface NavbarProps {
+  onInquireClick: () => void;
+}
+
+export function Navbar({ onInquireClick }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -16,40 +21,51 @@ export function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 bg-white border-b border-gray-200 ${
-        isScrolled ? 'shadow-md shadow-gray-200/50' : ''
+      className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${
+        isScrolled
+          ? 'bg-white border-blue-200 shadow-lg py-3'
+          : 'bg-white/80 border-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex items-center gap-2 cursor-pointer">
-            <div className="w-8 h-8 bg-[#1d4ed8] rounded-full flex items-center justify-center">
-              <div className="w-4 h-4 border-2 border-white rotate-45"></div>
-            </div>
-            <span className="text-xl font-bold tracking-tight text-[#1d4ed8]">
-              2AFRICA <span className="font-light text-gray-500">TRAVEL</span>
+        <div className="flex justify-between items-center h-16">
+          {/* Logo with logo.png */}
+          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <img 
+              src={logo} 
+              alt="2Africa Travel" 
+              className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300" 
+            />
+            <span className="text-xl font-bold tracking-wider text-blue-600">
+              2AFRICA <span className="font-light text-red-600 group-hover:text-red-500 transition-colors">TRAVEL</span>
             </span>
           </div>
           
+          {/* Desktop Links */}
           <div className="hidden md:flex space-x-8 items-center">
             {['Home', 'Tours', 'Deals', 'About Us', 'Contact'].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase().replace(' ', '-')}`}
-                className="text-gray-600 hover:text-[#1d4ed8] transition-colors text-sm font-medium"
+                className="relative text-sm font-light text-blue-900 hover:text-red-600 transition-colors duration-300 py-2 group"
               >
                 {item}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
-            <button className="px-6 py-2.5 bg-[#1d4ed8] text-white text-sm font-semibold rounded-full shadow-lg shadow-[#1d4ed8]/20 hover:bg-[#1e40af] transition-all">
+            <button
+              onClick={onInquireClick}
+              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-full shadow-lg shadow-blue-600/20 hover:shadow-blue-600/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+            >
               Inquire Now
             </button>
           </div>
 
+          {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-[#1d4ed8] focus:outline-none"
+              className="p-2 rounded-xl focus:outline-none transition-colors text-blue-900 hover:bg-blue-50"
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -57,13 +73,14 @@ export function Navbar() {
         </div>
       </div>
 
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-gray-200"
+            className="md:hidden bg-white border-t border-blue-200 overflow-hidden"
           >
             <div className="px-4 pt-2 pb-6 space-y-1">
               {['Home', 'Tours', 'Deals', 'About Us', 'Contact'].map((item) => (
@@ -71,13 +88,19 @@ export function Navbar() {
                   key={item}
                   href={`#${item.toLowerCase().replace(' ', '-')}`}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-3 text-base font-medium text-gray-600 hover:text-[#1d4ed8] border-b border-gray-100"
+                  className="block px-4 py-3.5 text-base font-light text-blue-900 hover:text-red-600 hover:bg-blue-50 rounded-xl transition-all"
                 >
                   {item}
                 </a>
               ))}
-              <div className="pt-4 px-3">
-                <button className="w-full bg-[#1d4ed8] text-white py-3 rounded-full text-sm font-semibold shadow-lg shadow-[#1d4ed8]/20 hover:bg-[#1e40af] transition-all">
+              <div className="pt-4 px-4">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onInquireClick();
+                  }}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl text-sm font-semibold shadow-lg shadow-blue-600/20 hover:shadow-blue-600/35 transition-all"
+                >
                   Inquire Now
                 </button>
               </div>

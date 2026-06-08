@@ -1,114 +1,185 @@
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Search } from 'lucide-react';
+import { ArrowRight, Search, MapPin, Sparkles, ShieldCheck, Award } from 'lucide-react';
+import { TOURS, DEALS } from '../data';
 
-export function Hero() {
+interface HeroProps {
+  onSearch?: (destination: string, type: string) => void;
+}
+
+export function Hero({ onSearch }: HeroProps) {
+  // Extract dynamic destinations from data
+  const locationsList = Array.from(
+    new Set([
+      ...TOURS.map(t => t.location?.split('/')[0].split(',')[0].trim() || ''),
+      ...DEALS.map(d => d.destination.split(',')[0].trim() || '')
+    ].filter(Boolean))
+  ).sort();
+
+  const [dest, setDest] = useState(locationsList[0] || '');
+  const [type, setType] = useState('Wildlife & Nature');
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (onSearch) {
+      onSearch(dest, type);
+    }
+  };
+
   return (
-    <div id="home" className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 w-full flex items-center justify-center bg-white min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col lg:flex-row items-center gap-12">
-        <div className="w-full lg:w-1/2 flex flex-col gap-6 text-left">
+    <div id="home" className="relative pt-32 pb-24 lg:pt-44 lg:pb-36 w-full flex items-center justify-center bg-white overflow-hidden min-h-screen">
+      {/* Decorative background radial elements strictly Red, Blue, and White theme */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-red-600/5 rounded-full blur-[150px] pointer-events-none" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col lg:flex-row items-center gap-16 relative z-10">
+        {/* Left Content */}
+        <div className="w-full lg:w-1/2 flex flex-col gap-8 text-left">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-2 bg-blue-50 border border-blue-100 w-fit px-4 py-1.5 rounded-full shadow-sm"
           >
-            <span className="px-3 py-1 bg-[#f8fafc] text-[#1d4ed8] text-xs font-bold uppercase tracking-widest rounded-md">
-              Welcome to 2Africa Travel
+            <Sparkles className="w-4 h-4 text-blue-600" />
+            <span className="text-blue-800 text-xs font-bold uppercase tracking-widest">
+              Bespoke Safaris & Tours
             </span>
           </motion.div>
           
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#111827] tracking-tight leading-[1.1]"
-          >
-            Experience the <br className="hidden md:block"/> <span className="text-[#dc2626]">Wild</span> Side of Life.
-          </motion.h1>
+          <div className="flex flex-col gap-4">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-blue-955 tracking-tight leading-[1.05]"
+            >
+              Explore the <br />
+              <span className="text-red-600">
+                Wild Majesty
+              </span> <br />
+              of Africa.
+            </motion.h1>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-blue-900/80 text-lg sm:text-xl max-w-xl leading-relaxed font-light"
+            >
+              Drenched by the warm Indian Ocean and blessed with 320 days of sunshine a year, Durban is your gateway to spectacular safaris, culture, and paradise.
+            </motion.p>
+          </div>
           
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
+          {/* Interactive Search Bar with Dynamic Dropdown */}
+          <motion.form
+            initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-gray-500 text-lg max-w-md leading-relaxed"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            onSubmit={handleSearchSubmit}
+            className="p-3 bg-white border border-blue-200 rounded-3xl shadow-xl flex flex-col sm:flex-row items-center gap-3 max-w-xl w-full"
           >
-            Drenched by the Indian Ocean and 320 days of sunshine a year, Durban has a unique blend of culture, fauna and flora that makes it a sub-tropical paradise.
-          </motion.p>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="mt-4 p-2 bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col sm:flex-row items-center gap-2 max-w-lg"
-          >
-            <div className="flex-1 px-4 py-2 w-full sm:border-r border-gray-100">
-              <label className="block text-[10px] font-bold text-gray-400 uppercase">Destination</label>
-              <input type="text" placeholder="Where to?" className="w-full text-sm font-semibold focus:outline-none bg-transparent placeholder-gray-300 text-black" />
+            <div className="flex-grow flex items-center gap-3 px-4 py-2 w-full sm:border-r border-blue-100">
+              <MapPin className="w-5 h-5 text-blue-600 shrink-0" />
+              <div className="w-full">
+                <label className="block text-[10px] font-bold text-blue-800/60 uppercase tracking-widest">Destination</label>
+                <select
+                  value={dest}
+                  onChange={(e) => setDest(e.target.value)}
+                  className="w-full text-sm font-light focus:outline-none bg-transparent text-blue-950 border-none p-0 mt-0.5 outline-none cursor-pointer [color-scheme:light]"
+                >
+                  {locationsList.map((locationName) => (
+                    <option key={locationName} value={locationName}>
+                      {locationName}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="flex-1 px-4 py-2 w-full sm:border-r border-gray-100">
-              <label className="block text-[10px] font-bold text-gray-400 uppercase">Safari Type</label>
-              <select className="w-full text-sm font-semibold focus:outline-none bg-transparent text-black outline-none border-none">
-                <option>Wildlife & Nature</option>
-                <option>Coastal Escape</option>
-                <option>Adventure Trek</option>
+            
+            <div className="flex-grow px-4 py-2 w-full sm:border-r border-blue-100">
+              <label className="block text-[10px] font-bold text-blue-800/60 uppercase tracking-widest">Safari Type</label>
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                className="w-full text-sm font-light focus:outline-none bg-transparent text-blue-950 border-none p-0 mt-0.5 outline-none cursor-pointer [color-scheme:light]"
+              >
+                <option value="Wildlife & Nature">Wildlife & Safaris</option>
+                <option value="Coastal Escape">Coastal Escapes</option>
+                <option value="Adventure Trek">Adventure Treks</option>
               </select>
             </div>
-            <a href="#tours" className="bg-[#dc2626] p-4 rounded-xl text-white hover:bg-[#b91c1c] transition-colors w-full sm:w-auto flex justify-center mt-2 sm:mt-0">
-               <Search className="h-5 w-5" />
-            </a>
-          </motion.div>
+            
+            <button
+              type="submit"
+              className="bg-blue-600 p-4 rounded-2xl text-white hover:bg-blue-700 hover:scale-[1.05] active:scale-[0.95] transition-all w-full sm:w-auto flex justify-center items-center shrink-0 shadow-lg shadow-blue-600/20"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+          </motion.form>
 
-          {/* Buttons matching existing Hero component structure but restyled */}
+          {/* Quick Highlights */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="flex flex-col sm:flex-row gap-4 mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="flex flex-wrap gap-6 text-sm text-blue-900/70 font-light"
           >
-            <a
-              href="#tours"
-              className="group flex items-center justify-center gap-2 bg-[#1d4ed8] text-white px-8 py-3 rounded-full text-sm font-semibold shadow-lg shadow-[#1d4ed8]/20 hover:bg-[#1e40af] transition-all"
-            >
-              Explore Tours
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a
-              href="#about-us"
-              className="flex items-center justify-center hover:bg-gray-100 text-gray-600 px-8 py-3 rounded-full text-sm font-semibold transition-all border border-gray-200"
-            >
-              About Us
-            </a>
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-blue-600" />
+              <span>Certified Local Guides</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Award className="w-5 h-5 text-red-600" />
+              <span>100% Custom Tailored Packages</span>
+            </div>
           </motion.div>
         </div>
 
-        {/* Feature Grid corresponding to design's right panel */}
-        <div className="w-full lg:w-1/2 h-[400px] lg:h-[500px] grid grid-cols-2 grid-rows-2 gap-4">
-          <div className="bg-[#1d4ed8] rounded-[32px] row-span-2 relative overflow-hidden group shadow-xl">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+        {/* Right Collage Panel */}
+        <div className="w-full lg:w-1/2 h-[450px] lg:h-[550px] grid grid-cols-2 grid-rows-2 gap-4">
+          <div className="bg-white rounded-[40px] row-span-2 relative overflow-hidden group border border-blue-100 shadow-lg">
+            <div className="absolute inset-0 bg-gradient-to-t from-blue-955/70 via-blue-900/10 to-transparent z-10" />
             <div className="absolute bottom-8 left-8 text-white z-20">
-              <h3 className="text-2xl font-bold">Durban</h3>
-              <p className="text-sm text-white/80">South Africa</p>
+              <span className="bg-blue-600 text-[10px] font-bold uppercase px-3 py-1 rounded-full tracking-wider mb-2 inline-block">
+                Sub-tropical Paradise
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-bold">Durban Golden Mile</h3>
+              <p className="text-sm text-blue-100 font-light">Warm water & surf</p>
             </div>
             <div 
-              className="absolute inset-0 opacity-40 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1576487248805-fcb11aae7030?ixlib=rb-4.0.3&auto=format&fit=crop&q=80")' }}
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-[1200ms] group-hover:scale-110 ease-out"
+              style={{ backgroundImage: 'url("https://whaffqypaptwczpjxjlw.supabase.co/storage/v1/object/public/mandela-capture/durban-city-tour/durban-city.jpg")' }}
             />
           </div>
-          <div className="bg-[#dc2626] rounded-[32px] relative overflow-hidden shadow-xl group">
-             <div className="absolute inset-0 bg-black/20 z-10" />
+
+          <div className="bg-white rounded-[40px] relative overflow-hidden group border border-blue-100 shadow-lg">
+             <div className="absolute inset-0 bg-gradient-to-t from-blue-955/70 to-transparent z-10" />
              <div className="absolute bottom-6 left-6 text-white z-20">
-               <h3 className="text-xl font-bold">Kruger Park</h3>
-               <p className="text-xs text-white/80">South Africa</p>
+               <span className="bg-red-600 text-[10px] font-bold uppercase px-3 py-1 rounded-full tracking-wider mb-1 inline-block">
+                 Big 5 Wildlife
+               </span>
+               <h3 className="text-xl font-bold">Hluhluwe Safari</h3>
+               <p className="text-xs text-blue-100 font-light">Rhino conservation reserve</p>
              </div>
              <div 
-              className="absolute inset-0 opacity-40 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1546182990-dffeafbe841d?ixlib=rb-4.0.3&auto=format&fit=crop&q=80")' }}
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-[1200ms] group-hover:scale-110 ease-out"
+              style={{ backgroundImage: 'url("https://whaffqypaptwczpjxjlw.supabase.co/storage/v1/object/public/mandela-capture/st-lucia/st-lucia.jpg")' }}
             />
           </div>
-          <div className="bg-white border border-gray-200 rounded-[32px] p-8 flex flex-col justify-between shadow-xl shadow-gray-200/50">
-            <div className="text-4xl text-[#dc2626] font-bold italic">100+</div>
+
+          <div className="bg-white border border-blue-100 rounded-[40px] p-8 flex flex-col justify-between shadow-xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-blue-600/5 to-transparent rounded-full blur-xl" />
+            <div className="text-5xl font-extrabold text-blue-600 tracking-tight italic">
+              100%
+            </div>
             <div>
-              <p className="text-sm font-bold text-[#111827]">Expert Guides</p>
-              <p className="text-xs text-gray-500 mt-1">Certified safari specialists at your service.</p>
+              <p className="text-base font-bold text-blue-955">Authentic Escapes</p>
+              <p className="text-xs text-blue-800 mt-1 leading-relaxed font-light">
+                Handcrafted itineraries custom tailored for individuals, groups, or corporate events.
+              </p>
             </div>
           </div>
         </div>
