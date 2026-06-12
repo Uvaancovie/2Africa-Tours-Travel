@@ -1,13 +1,14 @@
 import React from 'react';
 import { DEALS } from '../data';
 import { Deal } from '../types';
-import { Tag, Clock, MapPin } from 'lucide-react';
+import { Tag, Clock, MapPin, ArrowRight } from 'lucide-react';
 
 interface DealsProps {
   onSelectDeal: (deal: Deal) => void;
+  onViewAllDeals?: (dealId?: string) => void;
 }
 
-export function Deals({ onSelectDeal }: DealsProps) {
+export function Deals({ onSelectDeal, onViewAllDeals }: DealsProps) {
   return (
     <section id="deals" className="py-28 bg-surface text-on-surface relative overflow-hidden">
       {/* Background radial elements strictly Red, Blue, and White theme */}
@@ -31,9 +32,20 @@ export function Deals({ onSelectDeal }: DealsProps) {
               Exclusive Packages & Deals
             </h2>
           </div>
-          <p className="text-on-surface-variant max-w-[448px] text-sm md:text-base border-l-2 border-accent pl-4 py-1.5 font-light leading-relaxed">
-            Discover outstanding value on premium African safaris and tours. These curated deals won't last long, so secure your adventure today.
-          </p>
+          <div className="flex flex-col items-end gap-3">
+            <p className="text-on-surface-variant max-w-[448px] text-sm md:text-base border-l-2 border-accent pl-4 py-1.5 font-light leading-relaxed">
+              Discover outstanding value on premium African safaris and tours. These curated deals won't last long, so secure your adventure today.
+            </p>
+            {onViewAllDeals && (
+              <button
+                onClick={() => onViewAllDeals()}
+                className="flex items-center gap-2 text-xs font-bold text-accent hover:text-accent/80 transition-colors uppercase tracking-widest"
+              >
+                View All Deals
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Grid */}

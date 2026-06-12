@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Search, MapPin, Sparkles, ShieldCheck, Award } from 'lucide-react';
 import { TOURS, DEALS } from '../data';
+import { Carousel } from './Carousel';
 
 interface HeroProps {
   onSearch?: (destination: string, type: string) => void;
@@ -138,50 +139,9 @@ export function Hero({ onSearch }: HeroProps) {
           </motion.div>
         </div>
 
-        {/* Right Collage Panel */}
-        <div className="w-full lg:w-1/2 h-[450px] lg:h-[550px] grid grid-cols-2 grid-rows-2 gap-4">
-          <div className="bg-surface rounded-[40px] row-span-2 relative overflow-hidden group border border-border shadow-lg">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent z-10" />
-            <div className="absolute bottom-8 left-8 text-on-primary z-20">
-              <span className="bg-primary text-on-primary text-[10px] font-bold uppercase px-3 py-1 rounded-full tracking-wider mb-2 inline-block">
-                Sub-tropical Paradise
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-bold">Durban Golden Mile</h3>
-              <p className="text-sm text-surface-alt font-light">Warm water & surf</p>
-            </div>
-            <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-[1200ms] group-hover:scale-110 ease-out"
-              style={{ backgroundImage: 'url("https://whaffqypaptwczpjxjlw.supabase.co/storage/v1/object/public/mandela-capture/durban-city-tour/durban-city.jpg")' }}
-            />
-          </div>
-
-          <div className="bg-surface rounded-[40px] relative overflow-hidden group border border-border shadow-lg">
-             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10" />
-             <div className="absolute bottom-6 left-6 text-on-primary z-20">
-               <span className="bg-accent text-on-accent text-[10px] font-bold uppercase px-3 py-1 rounded-full tracking-wider mb-1 inline-block">
-                 Big 5 Wildlife
-               </span>
-               <h3 className="text-xl font-bold">Hluhluwe Safari</h3>
-               <p className="text-xs text-surface-alt font-light">Rhino conservation reserve</p>
-             </div>
-             <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-[1200ms] group-hover:scale-110 ease-out"
-              style={{ backgroundImage: 'url("https://whaffqypaptwczpjxjlw.supabase.co/storage/v1/object/public/mandela-capture/st-lucia/st-lucia.jpg")' }}
-            />
-          </div>
-
-          <div className="bg-surface border border-border rounded-[40px] p-8 flex flex-col justify-between shadow-xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/5 to-transparent rounded-full blur-xl" />
-            <div className="text-5xl font-extrabold text-primary tracking-tight italic">
-              100%
-            </div>
-            <div>
-              <p className="text-base font-bold text-on-surface">Authentic Escapes</p>
-              <p className="text-xs text-on-surface-variant mt-1 leading-relaxed font-light">
-                Handcrafted itineraries custom tailored for individuals, groups, or corporate events.
-              </p>
-            </div>
-          </div>
+        {/* Right Carousel Panel */}
+        <div className="w-full lg:w-1/2 h-[450px] lg:h-[550px] rounded-[40px] overflow-hidden relative border border-border shadow-lg">
+          <Carousel />
         </div>
       </div>
     </div>

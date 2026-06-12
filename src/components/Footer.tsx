@@ -1,7 +1,14 @@
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { useState } from 'react';
+import { Mail, Phone, MapPin, CheckCircle2 } from 'lucide-react';
 import logo from '../assets/logo.png';
 
-export function Footer() {
+interface FooterProps {
+  onViewChange?: (view: 'home' | 'newsletter' | 'deals') => void;
+}
+
+export function Footer({ onViewChange }: FooterProps) {
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
   return (
     <footer className="bg-white border-t border-blue-100 text-blue-900 pt-20 pb-10">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -50,10 +57,10 @@ export function Footer() {
               Tours
             </h4>
             <ul className="space-y-3 text-sm font-light text-blue-800">
-              <li><a href="#tours" className="hover:text-red-600 transition-colors">Half Day Tours</a></li>
-              <li><a href="#tours" className="hover:text-red-600 transition-colors">Full Day Tours</a></li>
-              <li><a href="#tours" className="hover:text-red-600 transition-colors">Safaris</a></li>
-              <li><a href="#tours" className="hover:text-red-600 transition-colors">Wilderness</a></li>
+              <li><a href="#tours" onClick={(e) => { e.preventDefault(); onViewChange?.('home'); setTimeout(() => document.querySelector('#tours')?.scrollIntoView({ behavior: 'smooth' }), 50); }} className="hover:text-red-600 transition-colors">Half Day Tours</a></li>
+              <li><a href="#tours" onClick={(e) => { e.preventDefault(); onViewChange?.('home'); setTimeout(() => document.querySelector('#tours')?.scrollIntoView({ behavior: 'smooth' }), 50); }} className="hover:text-red-600 transition-colors">Full Day Tours</a></li>
+              <li><button onClick={() => onViewChange?.('deals')} className="hover:text-red-600 transition-colors">Exclusive Deals</button></li>
+              <li><button onClick={() => onViewChange?.('newsletter')} className="hover:text-red-600 transition-colors">Newsletter</button></li>
             </ul>
           </div>
 
@@ -65,19 +72,35 @@ export function Footer() {
             <p className="text-blue-800/80 text-sm leading-relaxed mb-4 font-light">
               You will never miss a great deal if you join our mailing list!
             </p>
-            <form className="flex flex-col gap-3">
-              <input 
-                type="email" 
-                placeholder="Your email address" 
-                className="bg-white border border-blue-200 focus:border-red-600 rounded-xl px-4 py-3 text-sm outline-none transition-colors text-blue-950 placeholder-blue-300 font-light"
-              />
-              <button 
-                type="button"
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors shadow-md shadow-red-600/10"
-              >
-                Subscribe
-              </button>
-            </form>
+            {subscribed ? (
+              <div className="flex items-center gap-3 bg-green-50 border border-green-200 rounded-xl px-4 py-3">
+                <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
+                <span className="text-sm font-bold text-green-700">Subscribed! Check your inbox.</span>
+              </div>
+            ) : (
+              <form className="flex flex-col gap-3" onSubmit={(e) => {
+                e.preventDefault();
+                if (email.trim() && /\S+@\S+\.\S+/.test(email)) {
+                  setSubscribed(true);
+                  setEmail('');
+                  setTimeout(() => setSubscribed(false), 5000);
+                }
+              }}>
+                <input 
+                  type="email" 
+                  placeholder="Your email address" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-white border border-blue-200 focus:border-red-600 rounded-xl px-4 py-3 text-sm outline-none transition-colors text-blue-950 placeholder-blue-300 font-light"
+                />
+                <button 
+                  type="submit"
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors shadow-md shadow-red-600/10"
+                >
+                  Subscribe
+                </button>
+              </form>
+            )}
           </div>
 
         </div>

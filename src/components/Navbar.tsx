@@ -5,9 +5,11 @@ import logo from '../assets/logo.png';
 
 interface NavbarProps {
   onInquireClick: () => void;
+  onViewChange?: (view: 'home' | 'newsletter' | 'deals') => void;
+  currentView?: 'home' | 'newsletter' | 'deals';
 }
 
-export function Navbar({ onInquireClick }: NavbarProps) {
+export function Navbar({ onInquireClick, onViewChange, currentView }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -43,15 +45,45 @@ export function Navbar({ onInquireClick }: NavbarProps) {
           
           {/* Desktop Links */}
           <div className="hidden md:flex space-x-8 items-center">
-            {['Home', 'Tours', 'Deals', 'About Us', 'Contact'].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase().replace(' ', '-')}`}
-                className="relative text-sm font-light text-on-surface hover:text-accent transition-colors duration-300 py-2 group"
-              >
-                {item}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full" />
-              </a>
+            {[
+              { label: 'Home', href: '#home', view: 'home' as const },
+              { label: 'Tours', href: '#tours', view: 'home' as const },
+              { label: 'Deals', href: undefined, view: 'deals' as const },
+              { label: 'Newsletter', href: undefined, view: 'newsletter' as const },
+              { label: 'About Us', href: '#about-us', view: 'home' as const },
+              { label: 'Contact', href: '#contact', view: 'home' as const },
+            ].map((item) => (
+              item.href ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (onViewChange) onViewChange('home');
+                    setTimeout(() => {
+                      const el = document.querySelector(item.href!);
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }, 50);
+                  }}
+                  className="relative text-sm font-light text-on-surface hover:text-accent transition-colors duration-300 py-2 group"
+                >
+                  {item.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full" />
+                </a>
+              ) : (
+                <button
+                  key={item.label}
+                  onClick={() => { if (onViewChange) onViewChange(item.view); }}
+                  className={`relative text-sm font-light py-2 group transition-colors duration-300 ${
+                    currentView === item.view ? 'text-accent' : 'text-on-surface hover:text-accent'
+                  }`}
+                >
+                  {item.label}
+                  <span className={`absolute bottom-0 left-0 h-0.5 bg-accent transition-all duration-300 ${
+                    currentView === item.view ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`} />
+                </button>
+              )
             ))}
             <button
               onClick={onInquireClick}
@@ -83,15 +115,44 @@ export function Navbar({ onInquireClick }: NavbarProps) {
             className="md:hidden bg-surface border-t border-border overflow-hidden"
           >
             <div className="px-4 pt-2 pb-6 space-y-1">
-              {['Home', 'Tours', 'Deals', 'About Us', 'Contact'].map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase().replace(' ', '-')}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3.5 text-base font-light text-on-surface hover:text-accent hover:bg-surface-alt rounded-xl transition-all"
-                >
-                  {item}
-                </a>
+              {[
+                { label: 'Home', href: '#home', view: 'home' as const },
+                { label: 'Tours', href: '#tours', view: 'home' as const },
+                { label: 'Deals', href: undefined, view: 'deals' as const },
+                { label: 'Newsletter', href: undefined, view: 'newsletter' as const },
+                { label: 'About Us', href: '#about-us', view: 'home' as const },
+                { label: 'Contact', href: '#contact', view: 'home' as const },
+              ].map((item) => (
+                item.href ? (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMobileMenuOpen(false);
+                      if (onViewChange && item.view !== 'home') onViewChange(item.view);
+                      setTimeout(() => {
+                        const el = document.querySelector(item.href!);
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      }, 50);
+                    }}
+                    className={`block px-4 py-3.5 text-base font-light rounded-xl transition-all ${
+                      currentView === item.view ? 'text-accent bg-surface-alt' : 'text-on-surface hover:text-accent hover:bg-surface-alt'
+                    }`}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <button
+                    key={item.label}
+                    onClick={() => { setMobileMenuOpen(false); if (onViewChange) onViewChange(item.view); }}
+                    className={`block w-full text-left px-4 py-3.5 text-base font-light rounded-xl transition-all ${
+                      currentView === item.view ? 'text-accent bg-surface-alt' : 'text-on-surface hover:text-accent hover:bg-surface-alt'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                )
               ))}
               <div className="pt-4 px-4">
                 <button
